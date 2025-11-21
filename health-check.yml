@@ -1,8 +1,26 @@
 ---
-- name: Health Check
+- name: Health Check and Last Seen Monitoring
   hosts: all
   gather_facts: yes
+  become: yes
+  
   tasks:
-    - name: Show status
+    - name: Register last seen timestamp
       debug:
-        msg: "Хост {{ inventory_hostname }} онлайн в {{ ansible_date_time.iso8601 }}"
+        msg: |
+          🖥️ Хост: {{ inventory_hostname }}
+          ✅ Статус: ОНЛАЙН
+          🕐 Время: {{ ansible_date_time.iso8601 }}
+          💾 ОС: {{ ansible_distribution }} {{ ansible_distribution_version }}
+          📊 Память: {{ ansible_memtotal_mb }} MB
+          🔧 Процессоры: {{ ansible_processor_count }}
+          ⏱️ Uptime: {{ ansible_uptime_seconds }} секунд
+
+    - name: Check disk space
+      command: df -h /
+      register: disk
+      changed_when: false
+
+    - name: Show disk space
+      debug:
+        msg: "💽 Диск: {{ disk.stdout }}"
