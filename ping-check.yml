@@ -1,0 +1,11 @@
+---
+- name: Quick Ping Check
+  hosts: all
+  
+  tasks:
+    - name: Test connection
+      ping:
+      
+    - name: Success message
+      debug:
+        msg: "✅ {{ inventory_hostname }} - доступен"
