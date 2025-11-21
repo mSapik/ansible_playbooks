@@ -1,0 +1,18 @@
+---
+- name: Check for System Updates
+  hosts: all
+  become: yes
+  
+  tasks:
+    - name: Check available updates (RPM)
+      command: dnf check-update
+      register: updates
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Show updates count
+      debug:
+        msg: |
+          📦 Хост: {{ inventory_hostname }}
+          🔄 Доступно обновлений: {{ updates.stdout_lines | length }}
+          📝 Список: {{ updates.stdout_lines | join(', ') }}
