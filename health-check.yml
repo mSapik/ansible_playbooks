@@ -1,0 +1,8 @@
+---
+- name: Health Check
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Show status
+      debug:
+        msg: "Хост {{ inventory_hostname }} онлайн в {{ ansible_date_time.iso8601 }}"
